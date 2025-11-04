@@ -17,8 +17,17 @@ CoSessionVariableHeuristic >> appliesForNode: aNode inContext: aContext [
 { #category : 'requests' }
 CoSessionVariableHeuristic >> buildFetcherFor: aMessageNode inContext: aContext [
 	
-	^ CoCollectionFetcher onCollection: 
-			( self session words collect: [ :each | (NECVariableEntry contents: each key node: each value) ])
+        ^ CoCollectionFetcher onCollection:
+                        (self session words collect: [ :each |
+                                | key node |
+                                each isAssociation
+                                        ifTrue: [ key := each key. node := each value ]
+                                        ifFalse: [ key := each. node := nil ].
+                                NECVariableEntry
+                                        contents: (key isString
+                                                ifTrue: [ key ]
+                                                ifFalse: [ key asString ])
+                                        node: node ])
 ]
 
 { #category : 'accessing' }

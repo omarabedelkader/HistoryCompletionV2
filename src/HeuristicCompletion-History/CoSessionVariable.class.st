@@ -55,13 +55,13 @@ CoSessionVariable class >> reset [
 { #category : 'adding' }
 CoSessionVariable >> addNewVariableInVocabulary: anAnn [
 	
-	self addVocabulary: (anAnn class -> anAnn class) at: DateAndTime now 
+	self addVocabulary: (anAnn classAdded -> anAnn classAdded) at: DateAndTime now
 ]
 
 { #category : 'adding' }
 CoSessionVariable >> addVariableInVocabulary: anAnn [
 
-	self addVocabulary: anAnn selectedItem class  at: DateAndTime now
+	self addVocabulary: anAnn selectedItem class at: DateAndTime now
 ]
 
 { #category : 'adding' }
