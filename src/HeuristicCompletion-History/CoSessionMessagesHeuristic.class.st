@@ -12,22 +12,6 @@ Class {
 }
 
 { #category : 'requests' }
-CoSessionMessagesHeuristic class >> installSessionInSystem [
-	<script>
-	"self installSessionInSystem"
-	
-	| engine builder heuBuilder  newElement |
-	engine := CoCompletionEngine new.
-	builder := CoASTHeuristicsResultSetBuilder new. 
-	heuBuilder := CoHeuristicBuilder new. 
-	newElement := heuBuilder add: CoSessionMessagesHeuristic new; build.
-	newElement next: builder messageHeuristic.
-	engine completionBuilder: ( builder messageHeuristic: newElement ).  
-
-	RubSmalltalkEditor completionEngineInstance: engine
-]
-
-{ #category : 'requests' }
 CoSessionMessagesHeuristic >> appliesForNode: aNode inContext: aContext [
 
 	^ aNode isMethod or: [ aNode isMessage ]
