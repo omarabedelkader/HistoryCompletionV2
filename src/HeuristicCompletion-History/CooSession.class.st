@@ -1,5 +1,11 @@
+"
+I implement a session that collects execution information.
+I collect the last words in modified methods.
+
+I
+"
 Class {
-	#name : 'CoSessionVariable',
+	#name : 'CooSession',
 	#superclass : 'Object',
 	#instVars : [
 		'vocabularyCache'
@@ -11,28 +17,28 @@ Class {
 	#package : 'HeuristicCompletion-History'
 }
 
-{ #category : 'accessing' }
-CoSessionVariable class >> current [ 
+{ #category : 'actions' }
+CooSession class >> current [ 
 
 	^ Current ifNil: [ Current := self new ]
 ]
 
 { #category : 'actions' }
-CoSessionVariable class >> deinstall [
+CooSession class >> deinstall [
 	<script>
 	
 	self environment codeChangeAnnouncer unsubscribe: self current.
-	CoSessionVariable allInstances 
+	CooSession allInstances 
 		do: [ :each | self environment codeChangeAnnouncer unsubscribe: each ]
 ]
 
 { #category : 'actions' }
-CoSessionVariable class >> install [
+CooSession class >> install [
 	<script>
 	
 	self environment codeChangeAnnouncer
-		when: ClassAdded 
-		send: #addNewVariableInVocabulary: 
+		when: MethodAdded
+		send: #addNewMethodInVocabulary: 
 		to: self current.
 	"
 	This does not work for now because we are expecting a node and the menu does not give us a node
@@ -43,8 +49,8 @@ CoSessionVariable class >> install [
 		to: self current."
 ]
 
-{ #category : 'initialization' }
-CoSessionVariable class >> reset [
+{ #category : 'actions' }
+CooSession class >> reset [
 	<script>
 	Current ifNotNil: [ 
 		self environment codeChangeAnnouncer
@@ -52,38 +58,38 @@ CoSessionVariable class >> reset [
 	Current := nil ]
 ]
 
-{ #category : 'adding' }
-CoSessionVariable >> addNewVariableInVocabulary: anAnn [
+{ #category : 'accessing' }
+CooSession >> addMessageInVocabulary: anAnn [
+
+	self addVocabulary: anAnn selectedItem selector  at: DateAndTime now
+]
+
+{ #category : 'vocabulary' }
+CooSession >> addNewMethodInVocabulary: anAnn [
 	
-	self addVocabulary: (anAnn classAdded -> anAnn classAdded) at: DateAndTime now
+	self addVocabulary: (anAnn selector -> anAnn method ast) at: DateAndTime now 
 ]
 
-{ #category : 'adding' }
-CoSessionVariable >> addVariableInVocabulary: anAnn [
-
-	self addVocabulary: anAnn selectedItem class at: DateAndTime now
-]
-
-{ #category : 'adding' }
-CoSessionVariable >> addVocabulary: aString at: aDateAndTime [
+{ #category : 'vocabulary' }
+CooSession >> addVocabulary: aString at: aDateAndTime [
 
 	vocabularyCache at: aString put: aDateAndTime
 ]
 
 { #category : 'initialization' }
-CoSessionVariable >> initialize [
+CooSession >> initialize [
 
 	super initialize.
 	vocabularyCache := LRUCache new maximumWeight: 1000
 ]
 
 { #category : 'accessing' }
-CoSessionVariable >> size [
+CooSession >> size [
 	^ vocabularyCache size
 ]
 
-{ #category : 'matching' }
-CoSessionVariable >> words [
+{ #category : 'accessing' }
+CooSession >> words [
 
 	^ vocabularyCache keys
 ]

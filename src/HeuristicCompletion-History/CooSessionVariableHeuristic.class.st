@@ -1,5 +1,5 @@
 Class {
-	#name : 'CoSessionVariableHeuristic',
+	#name : 'CooSessionVariableHeuristic',
 	#superclass : 'CoASTNodeFetcherHeuristic',
 	#instVars : [
 		'session'
@@ -9,13 +9,13 @@ Class {
 }
 
 { #category : 'requests' }
-CoSessionVariableHeuristic >> appliesForNode: aNode inContext: aContext [
+CooSessionVariableHeuristic >> appliesForNode: aNode inContext: aContext [
 
 	^ aNode isVariable
 ]
 
 { #category : 'requests' }
-CoSessionVariableHeuristic >> buildFetcherFor: aMessageNode inContext: aContext [
+CooSessionVariableHeuristic >> buildFetcherFor: aMessageNode inContext: aContext [
 	
         ^ CoCollectionFetcher onCollection:
                         (self session words collect: [ :each |
@@ -31,11 +31,11 @@ CoSessionVariableHeuristic >> buildFetcherFor: aMessageNode inContext: aContext 
 ]
 
 { #category : 'accessing' }
-CoSessionVariableHeuristic >> session [
-	^ session ifNil: [ session := CoSessionVariable current ]
+CooSessionVariableHeuristic >> session [
+	^ session ifNil: [ session := CooSessionVariable current ]
 ]
 
 { #category : 'accessing' }
-CoSessionVariableHeuristic >> session: anObject [
+CooSessionVariableHeuristic >> session: anObject [
 	session := anObject
 ]
